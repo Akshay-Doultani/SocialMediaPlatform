@@ -182,8 +182,7 @@ export function getFilePreview(fileId: string) {
       fileId,
       2000,
       2000,
-      'top',
-      100
+      
     );
 
     if (!fileUrl) throw new Error('Failed to get file URL');
@@ -611,3 +610,23 @@ export const unfollowUser = async (currentUserId: string, targetUserId: string):
     throw error;
   }
 };
+
+
+// ============================== GET USER'S POST
+export async function getUserPosts(userId?: string) {
+  if (!userId) return;
+
+  try {
+    const post = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.equal("creator", userId), Query.orderDesc("$createdAt")]
+    );
+
+    if (!post) throw Error;
+
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
+}

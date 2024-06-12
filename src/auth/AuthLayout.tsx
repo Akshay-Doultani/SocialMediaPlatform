@@ -1,5 +1,4 @@
-import React from 'react'
-import SignupForm from './forms/SignupForm'
+
 import { Outlet, Navigate } from 'react-router-dom'
 
 export default function AuthLayout() {

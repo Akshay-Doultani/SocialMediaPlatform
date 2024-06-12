@@ -10,7 +10,7 @@ import {
   Link,
   Outlet,
   useParams,
-  useLocation,
+
 } from "react-router-dom";
 import LikedPosts from "./LikedPosts";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ const StatBlock = ({ value, label }: StatBlockProps) => (
 const Profile = () => {
   const { id } = useParams();
   const { user } = useUserContext();
-  const { pathname } = useLocation();
+  
   const [isFollowing, setIsFollowing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState<IUserExtended | null>(null);
@@ -98,7 +98,7 @@ const Profile = () => {
             </div>
 
             <div className="flex gap-8 mt-10 items-center justify-center xl:justify-start flex-wrap z-20">
-            <StatBlock value={currentUser.posts.length} label="Posts" />
+              <StatBlock value={currentUser.posts?.length || 0} label="Posts" />
               <StatBlock value={currentUser.followers?.length || 0} label="Followers" />
               <StatBlock value={currentUser.following?.length || 0} label="Following" />
             </div>
@@ -138,7 +138,7 @@ const Profile = () => {
       <Routes>
         <Route
           index
-          element={<GridPostList posts={currentUser.posts} showUser={false} />}
+          element={<GridPostList posts={currentUser.posts || []} showUser={false} />}
         />
         {currentUser.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />

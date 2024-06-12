@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost, IUpdateUser, IUserExtended } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import {
   useQuery,
   useMutation,
@@ -9,14 +9,14 @@ import {
 import {
   createPost, createUserAccount, deletePost,
   deleteSavedPost, getCurrentUser, getInfinitePosts,
-  getPostById, getRecentPosts, getUserById, getUsers,
+  getPostById, getRecentPosts, getUserById, getUserPosts, getUsers,
   likePost, savePost, searchPosts, signInAccount,
   signOutAccount, updatePost, updateUser, 
 
 } from "../appwrite/api";
 import { QUERY_KEYS } from "./queryKeys";
 
-import { followUser, unfollowUser } from '@/lib/appwrite/api';
+
 
 
 export const useCreateUserAccount = () => {
@@ -169,6 +169,11 @@ export const useDeletePost = () => {
 // POST QUERIES
 // ============================================================
 
+
+
+
+
+
 export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
@@ -180,11 +185,26 @@ export const useGetPosts = () => {
       }
 
       // Use the $id of the last document as the cursor.
-      const lastId = lastPage.documents[lastPage?.documents.length - 1].$id;
-      return lastId;
+      const lastId = lastPage?.documents[lastPage?.documents.length - 1].$id;
+      return lastId ? parseInt(lastId, 10) : null;
     },
+    initialPageParam: 0, // Provide the initial page parameter here
   });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const useSearchPosts = (searchTerm: string) => {
   return useQuery({
@@ -227,3 +247,10 @@ export const useUpdateUser = () => {
 
 
 
+export const useGetUserPosts = (userId?: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => getUserPosts(userId),
+    enabled: !!userId,
+  });
+};

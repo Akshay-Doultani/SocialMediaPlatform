@@ -1,18 +1,34 @@
-import { useUserContext } from '@/auth/contexts/AuthContext';
-import Loader from '@/components/shared/Loader';
-import PostStates from '@/components/shared/PostStates';
-import { Button } from '@/components/ui/button';
-import { useGetPostById } from '@/lib/react-queries/queries';
-import { multiFormatDateString } from "@/lib/utils";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Button } from "@/components/ui";
+import { Loader, PostStates } from "@/components/shared";
+import { GridPostList } from "@/components/shared";
+
+
+import { multiFormatDateString } from "@/lib/utils";
+import { useUserContext } from "@/auth/contexts/AuthContext";
+import { useDeletePost, useGetPostById, useGetUserPosts } from "@/lib/react-queries/queries";
+
 
 const PostDetails = () => {
-
-  const navigate=useNavigate();
-  const {user}=useUserContext();
+  const navigate = useNavigate();
   const { id } = useParams();
+  const { user } = useUserContext();
+
   const { data: post, isLoading } = useGetPostById(id);
+  const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(
+    post?.creator.$id
+  );
+  const { mutate: deletePost } = useDeletePost();
+
+  const relatedPosts = userPosts?.documents.filter(
+    (userPost) => userPost.$id !== id
+  );
+
+  const handleDeletePost = () => {
+    deletePost({ postId: id, imageId: post?.imageId });
+    navigate(-1);
+  };
 
   return (
     <div className="post_details-container">
@@ -83,10 +99,11 @@ const PostDetails = () => {
                 </Link>
 
                 <Button
-                  onClick={()=>{}}
+                  onClick={handleDeletePost}
                   variant="ghost"
-                  className={`ost_details-delete_btn ${user.id !== post?.creator.$id && "hidden"
-                    }`}>
+                  className={`ost_details-delete_btn ${
+                    user.id !== post?.creator.$id && "hidden"
+                  }`}>
                   <img
                     src={"/assets/icons/delete.svg"}
                     alt="delete"
@@ -125,10 +142,14 @@ const PostDetails = () => {
         <h3 className="body-bold md:h3-bold w-full my-10">
           More Related Posts
         </h3>
-
+        {isUserPostLoading || !relatedPosts ? (
+          <Loader />
+        ) : (
+          <GridPostList posts={relatedPosts} />
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default PostDetails
+export default PostDetails;

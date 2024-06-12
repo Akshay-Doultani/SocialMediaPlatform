@@ -1,6 +1,6 @@
 import './globals.css'
 import { Route, Routes } from 'react-router-dom';
-import SiginForm from './auth/forms/SiginForm';
+
 import SignupForm from './auth/forms/SignupForm';
 import AuthLayout from './auth/AuthLayout';
 import RootLayout from './root/RootLayout';

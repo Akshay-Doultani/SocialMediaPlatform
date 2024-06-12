@@ -20,7 +20,7 @@ import { PostValidation } from "@/lib/validation";
 import { useCreatePost, useUpdatePost } from "@/lib/react-queries/queries";
 
 import { useUserContext } from "@/auth/contexts/AuthContext";
-import { toast, useToast } from "../ui/use-toast";
+import { useToast } from "../ui/use-toast";
 import Loader from "../shared/Loader";
 
 
