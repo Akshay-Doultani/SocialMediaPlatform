@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 const SigninForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
@@ -58,6 +59,10 @@ const SigninForm = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevState => !prevState);
+  };
+  
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -93,7 +98,33 @@ const SigninForm = () => {
               <FormItem>
                 <FormLabel className="shad-form_label">Password</FormLabel>
                 <FormControl>
-                  <Input type="password" className="shad-input" {...field} />
+                  <div style={{ position: 'relative' }}>
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      className="shad-input"
+                      style={{ paddingRight: '40px' }} // Add some padding to the right to make space for the button
+                      {...field}
+                    />
+                    <Button
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                      style={{
+                        position: 'absolute',
+                        right: '10px',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        padding: '0',
+                        border: 'none',
+                        background: 'transparent'
+                      }}
+                    >
+                      <img
+                        src={showPassword ? "/assets/icons/eyeon.svg" : "/assets/icons/eyeoff.svg"}
+                        alt={showPassword ? 'Hide password' : 'Show password'}
+                        style={{ width: '24px', height: '24px' }}
+                      />
+                    </Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
