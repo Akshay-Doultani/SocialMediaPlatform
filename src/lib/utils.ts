@@ -18,7 +18,7 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
 
   switch (true) {
     case Math.floor(diffInDays) >= 30:
-      return multiFormatDateString(timestamp);
+      return date.toLocaleDateString(); // or any other format you prefer
     case Math.floor(diffInDays) === 1:
       return `${Math.floor(diffInDays)} day ago`;
     case Math.floor(diffInDays) > 1 && diffInDays < 30:
@@ -31,6 +31,7 @@ export const multiFormatDateString = (timestamp: string = ""): string => {
       return "Just now";
   }
 };
+
 
 export const checkIsLiked = (likeList: string[], userId: string) => {
   return likeList.includes(userId);
