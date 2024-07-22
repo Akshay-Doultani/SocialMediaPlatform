@@ -37,7 +37,7 @@ const PostStates = ({ post, userId }: PostStatsProps) => {
     }
 
     const savedPostRecord = currentUser?.save.find(
-        (record: Models.Document) => record.post.$id === post?.$id
+        (record: Models.Document) =>  record?.post?.$id === post?.$id
     );
 
     useEffect(()=>{
